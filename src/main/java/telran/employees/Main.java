@@ -1,13 +1,12 @@
 package telran.employees;
 
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.FileOutputStream;
 
 public class Main {
     public static void main(String[] args) {
-        String filePath = "employees-sql-data.csv";
-        
-        try (FileWriter writer = new FileWriter(filePath)) {
+        try (PrintWriter writer = new PrintWriter(new FileOutputStream("employees-sql-data.csv"))) {
             EmployeeGenerator.generateEmployees(writer);
         } catch (IOException e) {
             e.printStackTrace();

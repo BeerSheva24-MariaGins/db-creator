@@ -1,13 +1,13 @@
 package telran.employees;
 
-import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.io.IOException;
 import java.util.Random;
 
 public class EmployeeGenerator {
     private static final Random RANDOM = new Random();
     
-    public static void generateEmployees(FileWriter writer) throws IOException {
+    public static void generateEmployees(PrintWriter writer) throws IOException {        
         int id = Config.MIN_ID;         
         id = generateDepartmentEmployees(writer, id, "QA", 1, 2, 10, 0);             
         id = generateDepartmentEmployees(writer, id, "Development", 1, 0, 30, 0);          
@@ -15,25 +15,25 @@ public class EmployeeGenerator {
         id = generateDepartmentEmployees(writer, id, "Sales", 1, 0, 0, 3);
     }
     
-    private static int generateDepartmentEmployees(FileWriter writer, int startingId, String department, 
+    private static int generateDepartmentEmployees(PrintWriter writer, int startingId, String department, 
                                                     int numManagers, int numEmployees, 
                                                     int numWageEmployees, int numSalesPersons) throws IOException {
         int id = startingId;        
         
         for (int i = 0; i < numManagers; i++) {
-            writer.write(generateEmployeeRow(id++, "Manager", department, true) + "\n");
+            writer.println(generateEmployeeRow(id++, "Manager", department, true));
         }        
         
         for (int i = 0; i < numEmployees; i++) {
-            writer.write(generateEmployeeRow(id++, "Employee", department, false) + "\n");
+            writer.println(generateEmployeeRow(id++, "Employee", department, false));
         }        
         
         for (int i = 0; i < numWageEmployees; i++) {
-            writer.write(generateWageEmployeeRow(id++, department) + "\n");
+            writer.println(generateWageEmployeeRow(id++, department));
         }        
         
         for (int i = 0; i < numSalesPersons; i++) {
-            writer.write(generateSalesPersonRow(id++) + "\n");
+            writer.println(generateSalesPersonRow(id++));
         }
         
         return id;
@@ -42,14 +42,14 @@ public class EmployeeGenerator {
     private static String generateEmployeeRow(int id, String role, String department, boolean withFactor) {
         int basicSalary = getRandomSalary(Config.MIN_BASIC_SALARY, Config.MAX_BASIC_SALARY);
         String factor = withFactor ? String.format("%.1f", getRandomFactor(Config.MIN_FACTOR, Config.MAX_FACTOR)) : "";
-        return String.format("%d,%s,%d,%s,%s,,,,,", id, role, basicSalary, department, factor);
+        return String.format("%d,%s,%d,%s,%s,,,,", id, role, basicSalary, department, factor);
     }
     
     private static String generateWageEmployeeRow(int id, String department) {
         int basicSalary = getRandomSalary(Config.MIN_BASIC_SALARY, Config.MAX_BASIC_SALARY);
         int wage = getRandomNumber(Config.MIN_WAGE, Config.MAX_WAGE); 
         int hours = getRandomNumber(Config.MIN_HOURS, Config.MAX_HOURS);
-        return String.format("%d,WageEmployee,%d,%s,,%d,%d,,,", id, basicSalary, department, wage, hours);
+        return String.format("%d,WageEmployee,%d,%s,,%d,%d,,", id, basicSalary, department, wage, hours);
     }
     
     private static String generateSalesPersonRow(int id) {
